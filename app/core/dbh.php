@@ -6,7 +6,7 @@ class Model
     protected $_className = null;
     protected $_whereClause;
     protected $_orderBy;
-    protected $_PKName = 'ID'; // default name for the primary key
+    protected $_PKName = ['ID']; // default name for the primary key
 
     public function __construct(PDO $connection = null)
     {
@@ -47,18 +47,24 @@ class Model
         return $data;
     }
 
+    /*
     public function find($ID)
     {
-        $selectOne     = "SELECT * FROM $this->_className WHERE $this->_PKName = :$this->_PKName";
+        $selectOne     = "SELECT * FROM $this->_className WHERE";
+        foreach ($this->_PKName as $key => $pk) {
+            $selectOne .= "$pk = :$pk";
+            if ($key < count($this->_PKName) - 1)
+                $selectOne .= " AND ";
+        }
 
         $stmt = $this->_connection->prepare($selectOne);
         $stmt->execute(array($this->_PKName => $ID));
 
         $stmt->setFetchMode(PDO::FETCH_CLASS, $this->_className);
-        $value = $stmt->fetch();
-        //TODO: should this cause an exception when no record is found?
+        $value = $stmt->fetch();        
         return $value;
     }
+    */
 
     // SELECT * FROM Client WHERE firstName = 'Jon' AND lastName = 'Doe'
     public function where($field, $op, $value)
@@ -121,17 +127,29 @@ class Model
             foreach ($properties as $item)
                 $setClause[] = sprintf('%s = :%s', $item, $item);
             $setClause = implode(', ', $setClause);
-            $update = 'UPDATE ' . $this->_className . ' SET ' . $setClause . " WHERE $this->_PKName = :$this->_PKName";
+            $update = 'UPDATE ' . $this->_className . ' SET ' . $setClause . ' WHERE ';
+            foreach ($this->_PKName as $key => $pk) {
+                $update .= $pk . ' = ' . $pk;
+                if ($key < count($this->_PKName) - 1)
+                    $update .= ' AND ';
+            }
         }
 
         $stmt = $this->_connection->prepare($update);
         $stmt->execute($this->toArray($properties));
     }
 
-    public function delete()
+    public function delete($keyArray)
     {
-        $delete = "DELETE FROM $this->_className WHERE $this->_PKName = :$this->_PKName";
-        $stmt = $this->_connection->prepare($delete);
-        $stmt->execute(array($this->_PKName => $this->{$this->_PKName}));
+        if (count($keyArray) == count($this->_PKName)) {
+            $delete = 'DELETE FROM ' . $this->_className . ' WHERE ';
+            foreach ($this->_PKName as $key => $pk) {
+                $delete .= $pk . ' = ' . $keyArray[$key];
+                if ($key < count($this->_PKName) - 1)
+                    $delete .= ' AND ';
+            }
+            $stmt = $this->_connection->prepare($delete);
+            $stmt->execute($this->toArray($this->_PKName));
+        }
     }
 }
