@@ -16,11 +16,12 @@ CREATE TABLE Users(
     PRIMARY KEY (username)
 );
 
-CREATE TABLE Privilages (
-	username VARCHAR (255),
-    `right` enum ('add', 'edit', 'delete', 'suspend'),
-    `subject` enum ('user', 'article'),
-    PRIMARY KEY (username, `subject`)
+CREATE TABLE Privleges (
+	username VARCHAR (255) NOT NULL,
+    `right` enum ('add', 'edit', 'delete', 'suspend') NOT NULL,
+    `subject` enum ('user', 'article') NOT NULL,
+    PRIMARY KEY (username, `subject`),
+    FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Articles (
@@ -39,11 +40,12 @@ CREATE TABLE Articles (
 );
 
 CREATE TABLE EmailLogs (
-	recipientEmail VARCHAR (255),
-    `dateTime` DATETIME,
-    `subject` VARCHAR (255),
-    body TEXT, -- TODO: MAKE SURE THIS DATA TYPE IS CORRECT
-    PRIMARY KEY (recipientEmail, `dateTime`)
+	recipientEmail VARCHAR (255) NOT NULL,
+    `dateTime` DATETIME NOT NULL,
+    `subject` VARCHAR (255) NOT NULL,
+    body TEXT NOT NULL, -- TODO: MAKE SURE THIS DATA TYPE IS CORRECT
+    PRIMARY KEY (recipientEmail, `dateTime`),
+    FOREIGN KEY (recipientEmail) REFERENCES Users (email) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Subscriptions (
@@ -63,3 +65,61 @@ CREATE TABLE Delegates (
     FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE Regions (
+	regionName VARCHAR (255) NOT NULL,
+    PRIMARY KEY (regionName)
+);
+
+CREATE TABLE Countries (
+	countryName VARCHAR (255) NOT NULL,
+    regionName VARCHAR (255) NOT NULL,
+    orgID INT, -- TODO: MAKE SURE THIS CAN BE NULL
+    PRIMARY KEY (countryName),
+    FOREIGN KEY (regionName) REFERENCES Regions (regionName) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE ProStaTers (
+	prostaterName VARCHAR(255) NOT NULL,
+    countryName VARCHAR(255) NOT NULL,
+    population INT NOT NULL,
+    PRIMARY KEY (prostaterName, countryName),
+    FOREIGN KEY (countryName) REFERENCES Countries (countryName) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Vaccines (
+	vaccineName VARCHAR (255) NOT NULL
+);
+
+CREATE TABLE Vaccinations (
+	prostaterName VARCHAR (255) NOT NULL,
+    vaccineName VARCHAR (255) NOT NULL,
+    vaccinated INT NOT NULL,
+    FOREIGN KEY (prostaterName) REFERENCES ProStaTers (prostaterName) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (vaccineName) REFERENCES Vaccines (vaccineName) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (vaccineName, prostaterName)
+);
+
+CREATE TABLE Cases (
+	vaccineName VARCHAR (255) NOT NULL,
+    prostaterName VARCHAR (255) NOT NULL,
+    infections INT NOT NULL,
+    deaths INT NOT NULL,
+    FOREIGN KEY (vaccineName) REFERENCES Vaccines (vaccineName) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (prostaterName) REFERENCES ProStaTers (prostaterName) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (vaccineName, prostaterName)
+);
+
+CREATE TABLE UpdateLogs (
+	orgID INT NOT NULL,
+    prostaterName VARCHAR (255) NOT NULL,
+    `date` DATE NOT NULL,
+    vaccineName VARCHAR (255) NOT NULL,
+    vaccinated INT NOT NULL,
+    infections INT NOT NULL,
+    deaths INT NOT NULL,
+    FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (prostaterName) REFERENCES ProStaTers (prostaterName) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (vaccineName) REFERENCES Vaccines (vaccineName) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (orgID, `date`)
+);
