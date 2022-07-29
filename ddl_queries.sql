@@ -28,7 +28,7 @@ CREATE TABLE Articles (
 	articleName VARCHAR(255) NOT NULL,
 	authorFirstName VARCHAR(255),
 	authorLastName VARCHAR(255),
-	orgID VARCHAR(255),
+	orgID INT(255),
 	publicationDate DATE NOT NULL,
 	majorTopic VARCHAR(255) NOT NULL,
 	minorTopic VARCHAR(255) NOT NULL,
