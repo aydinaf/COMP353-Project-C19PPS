@@ -1,6 +1,6 @@
 <?php
 
-class Vaccine extends Model
+class Vaccines extends Model
 {
     protected $_PKName = ['vaccineName'];
     protected $vaccineName;

@@ -1,6 +1,6 @@
 <?php
 
-class UpdateLog extends Model
+class UpdateLogs extends Model
 {
     protected $_PKName = ['orgID', 'date'];
     protected $orgID;

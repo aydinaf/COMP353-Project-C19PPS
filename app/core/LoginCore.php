@@ -1,4 +1,5 @@
 <?php
+
 class LoginCore
 {
 	public static function login($username, $password)

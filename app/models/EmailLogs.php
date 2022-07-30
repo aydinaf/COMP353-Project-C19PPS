@@ -1,19 +1,19 @@
 <?php
 
-class EmailLog extends Model
+class EmailLogs extends Model
 {
-    protected $_PKName = ['recipientEmail', 'datetime'];
+    protected $_PKName = ['recipientEmail', 'dateTime'];
     protected $recipientEmail;
-    protected $datetime;
+    protected $dateTime;
     protected $subject;
     protected $body;
 
-    public function __construct($recipientEmail, $datetime, $subject, $body)
+    public function __construct($recipientEmail, $dateTime, $subject, $body)
     {
         parent::__construct();
 
         $this->recipientEmail = $recipientEmail;
-        $this->datetime = $datetime;
+        $this->dateTime = $dateTime;
         $this->subject = $subject;
         $this->body = $body;
     }

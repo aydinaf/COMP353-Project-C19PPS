@@ -1,6 +1,6 @@
 <?php
 
-class ProStaTer extends Model
+class ProStaTers extends Model
 {
     protected $_PKName = ['prostaterName', 'countryName'];
     protected $prostaterName;

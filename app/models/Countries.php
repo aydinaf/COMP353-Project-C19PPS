@@ -1,6 +1,6 @@
 <?php
 
-class Country extends Model
+class Countries extends Model
 {
     protected $_PKName = ['countryName'];
     protected $countryName;

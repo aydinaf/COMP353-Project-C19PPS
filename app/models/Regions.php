@@ -1,6 +1,6 @@
 <?php
 
-class Region extends Model
+class Regions extends Model
 {
     protected $_PKName = ['regionName'];
     protected $regionName;

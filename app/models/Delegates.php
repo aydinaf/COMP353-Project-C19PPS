@@ -1,6 +1,6 @@
 <?php
 
-class Delegate extends Model
+class Delegates extends Model
 {
     protected $_PKName = ['username', 'orgID'];
     protected $username;

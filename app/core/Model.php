@@ -10,15 +10,12 @@ class Model
 
     public function __construct(PDO $connection = null)
     {
-        //database parameters
-        $dbHostname = "nuc353.encs.concordia.ca";
-        $dbUsername = "nuc353_1";
-        $dbPassword = "Acers9x9";
-        $dbSchema = "nuc353_1";
+        //database parameters        
+        $dbConfig = include('../../DatabaseConnection.php');
 
         $this->_connection = $connection;
         if ($this->_connection === null) {
-            $this->_connection = new PDO("mysql:host=$dbHostname;dbname=$dbSchema", $dbUsername, $dbPassword);
+            $this->_connection = new PDO("mysql:host=$dbConfig->HOST;dbname=$dbConfig->SCHEMA", $dbConfig->USERNAME, $dbConfig->PASSWORD);
             $this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         $this->_className = get_class($this);
@@ -136,7 +133,7 @@ class Model
             $setClause = implode(', ', $setClause);
             $update = 'UPDATE ' . $this->_className . ' SET ' . $setClause . ' WHERE ';
             foreach ($this->_PKName as $key => $pk) {
-                $update .= $pk . ' = ' . $pk;
+                $update .= $pk . ' = :' . $pk;
                 if ($key < count($this->_PKName) - 1) {
                     $update .= ' AND ';
                 }
@@ -152,7 +149,7 @@ class Model
         if (count($keyArray) == count($this->_PKName)) {
             $delete = 'DELETE FROM ' . $this->_className . ' WHERE ';
             foreach ($this->_PKName as $key => $pk) {
-                $delete .= $pk . ' = ' . $keyArray[$key];
+                $delete .= $pk . ' = :' . $keyArray[$key];
                 if ($key < count($this->_PKName) - 1) {
                     $delete .= ' AND ';
                 }

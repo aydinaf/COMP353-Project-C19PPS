@@ -16,7 +16,7 @@ CREATE TABLE Users(
     PRIMARY KEY (username)
 );
 
-CREATE TABLE Privleges (
+CREATE TABLE Privileges (
 	username VARCHAR (255) NOT NULL,
     `right` enum ('add', 'edit', 'delete', 'suspend') NOT NULL,
     `subject` enum ('user', 'article') NOT NULL,

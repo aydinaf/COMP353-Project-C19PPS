@@ -21,6 +21,7 @@
 			</div>
 		</form>
 	</div>
+	<a href="signup.php">Register here.</a>
 </body>
 
 </html>

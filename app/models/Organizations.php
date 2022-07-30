@@ -1,6 +1,6 @@
 <?php
 
-class Organization extends Model
+class Organizations extends Model
 {
     protected $_PKName = ['orgID'];
     protected $orgID;
