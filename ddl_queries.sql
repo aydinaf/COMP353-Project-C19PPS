@@ -49,16 +49,18 @@ CREATE TABLE EmailLogs (
 CREATE TABLE Subscriptions (
 	username VARCHAR (255) NOT NULL,
     authorUsername VARCHAR (255) NOT NULL,
-    organization VARCHAR (255) NOT NULL,
+    `organization` VARCHAR (255) NOT NULL,
     FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (authorUsername) REFERENCES Articles (authorUsername) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (authorUsername) REFERENCES Articles (authorUsername) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (username, authorUsername, orgID)
 );
 
 CREATE TABLE Delegates (
 	username VARCHAR (255) NOT NULL,
     orgID INT NOT NULL,
     FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (username, orgID)
 );
 
 CREATE TABLE Regions (
@@ -84,7 +86,8 @@ CREATE TABLE ProStaTers (
 );
 
 CREATE TABLE Vaccines (
-	vaccineName VARCHAR (255) NOT NULL PRIMARY KEY
+	vaccineName VARCHAR (255) NOT NULL,
+    PRIMARY KEY (vaccineName)
 );
 
 CREATE TABLE Vaccinations (
