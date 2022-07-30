@@ -33,8 +33,9 @@ class Model
         $classProps = [];
         $array = get_object_vars($this);
         foreach ($array as $key => $value) {
-            if (!array_key_exists($key, $exclusions))
+            if (!array_key_exists($key, $exclusions)) {
                 $classProps[] = $key;
+            }
         }
         return $classProps;
     }
@@ -42,8 +43,9 @@ class Model
     protected function toArray($properties)
     {
         $data = [];
-        foreach ($properties as $prop)
+        foreach ($properties as $prop) {
             $data[$prop] = $this->$prop;
+        }
         return $data;
     }
 
@@ -71,20 +73,24 @@ class Model
     {
         //TODO : only if this is a string-type value
         $value = $this->_connection->quote($value);
-        if ($this->_whereClause == '')
+        if ($this->_whereClause == '') {
             $this->_whereClause .= "WHERE $field $op $value";
-        else
+        } else {
             $this->_whereClause .= " AND $field $op $value";
+        }
+
         return $this;
     }
 
     // SELECT * FROM Client ... ORDERBY firstName ASC, lastName ASC
     public function orderBy($field, $order = 'ASC')
     {
-        if ($this->_orderBy == '')
+        if ($this->_orderBy == '') {
             $this->_orderBy .= "ORDERBY $field $order";
-        else
+        } else {
             $this->_orderBy .= ", $field $order";
+        }
+
         return $this;
     }
 
@@ -124,14 +130,16 @@ class Model
             //update
             $setClause = [];
 
-            foreach ($properties as $item)
+            foreach ($properties as $item) {
                 $setClause[] = sprintf('%s = :%s', $item, $item);
+            }
             $setClause = implode(', ', $setClause);
             $update = 'UPDATE ' . $this->_className . ' SET ' . $setClause . ' WHERE ';
             foreach ($this->_PKName as $key => $pk) {
                 $update .= $pk . ' = ' . $pk;
-                if ($key < count($this->_PKName) - 1)
+                if ($key < count($this->_PKName) - 1) {
                     $update .= ' AND ';
+                }
             }
         }
 
@@ -145,8 +153,9 @@ class Model
             $delete = 'DELETE FROM ' . $this->_className . ' WHERE ';
             foreach ($this->_PKName as $key => $pk) {
                 $delete .= $pk . ' = ' . $keyArray[$key];
-                if ($key < count($this->_PKName) - 1)
+                if ($key < count($this->_PKName) - 1) {
                     $delete .= ' AND ';
+                }
             }
             $stmt = $this->_connection->prepare($delete);
             $stmt->execute($this->toArray($this->_PKName));
