@@ -14,6 +14,7 @@ class Model
         $dbConfig = include('../../DatabaseConnection.php');
 
         $this->_connection = $connection;
+        echo $dbConfig->HOST;
         if ($this->_connection === null) {
             $this->_connection = new PDO("mysql:host=$dbConfig->HOST;dbname=$dbConfig->SCHEMA", $dbConfig->USERNAME, $dbConfig->PASSWORD);
             $this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
