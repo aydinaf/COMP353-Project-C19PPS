@@ -36,7 +36,7 @@ CREATE TABLE Articles (
 	minorTopic VARCHAR(255) NOT NULL,
 	summary VARCHAR(255) NOT NULL,
     articleContent MEDIUMTEXT DEFAULT "" NOT NULL,
-    availability enum ('removed', 'available') DEFAULT 'available' NOT NULL,
+    availability ENUM ('removed', 'available') DEFAULT 'available' NOT NULL,
 	PRIMARY KEY (articleName, authorUsername, orgID, publicationDate),
 	FOREIGN KEY (authorUsername) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -96,28 +96,28 @@ CREATE TABLE Vaccines (
     PRIMARY KEY (vaccineName)
 );
 
-CREATE TABLE Vaccinations (
-	prostaterName VARCHAR (255) NOT NULL,
-    vaccineName VARCHAR (255) NOT NULL,
-    vaccinated INT NOT NULL,
-    `dateTime` DATETIME NOT NULL,
-    FOREIGN KEY (prostaterName) REFERENCES ProStaTers (prostaterName) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (vaccineName) REFERENCES Vaccines (vaccineName) ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY (vaccineName, prostaterName, `dateTime`)
-);
+-- CREATE TABLE Vaccinations (
+-- 	prostaterName VARCHAR (255) NOT NULL,
+--     vaccineName VARCHAR (255) NOT NULL,
+--     vaccinated INT NOT NULL,
+--     `dateTime` DATETIME NOT NULL,
+--     FOREIGN KEY (prostaterName) REFERENCES ProStaTers (prostaterName) ON DELETE CASCADE ON UPDATE CASCADE,
+--     FOREIGN KEY (vaccineName) REFERENCES Vaccines (vaccineName) ON DELETE CASCADE ON UPDATE CASCADE,
+--     PRIMARY KEY (vaccineName, prostaterName, `dateTime`)
+-- );
 
-CREATE TABLE Cases (
-	vaccineName VARCHAR (255) NOT NULL,
-    prostaterName VARCHAR (255) NOT NULL,
-    infections INT NOT NULL,
-    deaths INT NOT NULL,
-    `dateTime` DATETIME NOT NULL,
-    FOREIGN KEY (vaccineName) REFERENCES Vaccines (vaccineName) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (prostaterName) REFERENCES ProStaTers (prostaterName) ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY (vaccineName, prostaterName, `dateTime`)
-);
+-- CREATE TABLE Cases (
+-- 	vaccineName VARCHAR (255) NOT NULL,
+--     prostaterName VARCHAR (255) NOT NULL,
+--     infections INT NOT NULL,
+--     deaths INT NOT NULL,
+--     `dateTime` DATETIME NOT NULL,
+--     FOREIGN KEY (vaccineName) REFERENCES Vaccines (vaccineName) ON DELETE CASCADE ON UPDATE CASCADE,
+--     FOREIGN KEY (prostaterName) REFERENCES ProStaTers (prostaterName) ON DELETE CASCADE ON UPDATE CASCADE,
+--     PRIMARY KEY (vaccineName, prostaterName, `dateTime`)
+-- );
 
-CREATE TABLE UpdateLogs (
+CREATE TABLE Reports (
 	orgID INT NOT NULL,
     prostaterName VARCHAR (255) NOT NULL,
     `dateTime` DATETIME NOT NULL,
