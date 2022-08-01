@@ -14,18 +14,18 @@ CREATE TABLE Users(
     phone INT NOT NULL,
     pwdChecksum VARCHAR (255) NOT NULL,
     userType ENUM('Admin', 'Researcher', 'Delegate', 'User'),
-    `active` BIT DEFAULT 1,
+    `active` BIT DEFAULT 1 NOT NULL,
     FOREIGN KEY (citizenship) REFERENCES Countries (countryName),
     PRIMARY KEY (username)
 );
 
-CREATE TABLE Privileges (
-	username VARCHAR (255) NOT NULL,
-    `right` enum ('add', 'edit', 'delete', 'suspend') NOT NULL,
-    `subject` enum ('user', 'article') NOT NULL,
-    PRIMARY KEY (username, `subject`),
-    FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE
-);
+-- CREATE TABLE Privileges (
+-- 	username VARCHAR (255) NOT NULL,
+--     `right` enum ('add', 'edit', 'delete', 'suspend') NOT NULL,
+--     `subject` enum ('user', 'article') NOT NULL,
+--     PRIMARY KEY (username, `subject`),
+--     FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE
+-- );
 
 CREATE TABLE Articles (
 	articleName VARCHAR(255) NOT NULL,
@@ -35,6 +35,8 @@ CREATE TABLE Articles (
 	majorTopic VARCHAR(255) NOT NULL,
 	minorTopic VARCHAR(255) NOT NULL,
 	summary VARCHAR(255) NOT NULL,
+    articleContent MEDIUMTEXT DEFAULT "" NOT NULL,
+    availability enum ('removed', 'available') DEFAULT 'available' NOT NULL,
 	PRIMARY KEY (articleName, authorUsername, orgID, publicationDate),
 	FOREIGN KEY (authorUsername) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -44,7 +46,7 @@ CREATE TABLE EmailLogs (
 	recipientEmail VARCHAR (255) NOT NULL,
     `dateTime` DATETIME NOT NULL,
     `subject` VARCHAR (255) NOT NULL,
-    body TEXT NOT NULL, -- TODO: MAKE SURE THIS DATA TYPE IS CORRECT
+    body MEDIUMTEXT NOT NULL, -- TODO: MAKE SURE THIS DATA TYPE IS CORRECT
     PRIMARY KEY (recipientEmail, `dateTime`),
     FOREIGN KEY (recipientEmail) REFERENCES Users (email) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -115,16 +117,16 @@ CREATE TABLE Cases (
     PRIMARY KEY (vaccineName, prostaterName, `dateTime`)
 );
 
--- CREATE TABLE UpdateLogs (
--- 	orgID INT NOT NULL,
---     prostaterName VARCHAR (255) NOT NULL,
---     `date` DATE NOT NULL,
---     vaccineName VARCHAR (255) NOT NULL,
---     vaccinated INT NOT NULL,
---     infections INT NOT NULL,
---     deaths INT NOT NULL,
---     FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE,
---     FOREIGN KEY (prostaterName) REFERENCES ProStaTers (prostaterName) ON DELETE CASCADE ON UPDATE CASCADE,
---     FOREIGN KEY (vaccineName) REFERENCES Vaccines (vaccineName) ON DELETE CASCADE ON UPDATE CASCADE,
---     PRIMARY KEY (orgID, `date`)
--- );
+CREATE TABLE UpdateLogs (
+	orgID INT NOT NULL,
+    prostaterName VARCHAR (255) NOT NULL,
+    `dateTime` DATETIME NOT NULL,
+    vaccineName VARCHAR (255) NOT NULL,
+    vaccinated INT NOT NULL,
+    infections INT NOT NULL,
+    deaths INT NOT NULL,
+    FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (prostaterName) REFERENCES ProStaTers (prostaterName) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (vaccineName) REFERENCES Vaccines (vaccineName) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (orgID, `dateTime`)
+);
