@@ -130,5 +130,5 @@ CREATE TABLE Reports (
     FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (prostaterName) REFERENCES ProStaTers (prostaterName) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (vaccineName) REFERENCES Vaccines (vaccineName) ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY (orgID, `dateTime`)
+    PRIMARY KEY (`orgID`,`dateTime`,`prostaterName`,`vaccineName`)
 );
