@@ -49,19 +49,19 @@ CREATE TABLE Users(
 --     FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE
 -- );
 
-CREATE TABLE Articles (
-	articleName VARCHAR(255) NOT NULL,
-	authorUsername VARCHAR(255) NOT NULL,
-	orgID INT NOT NULL,
-	publicationDate DATE NOT NULL,
-	majorTopic VARCHAR(255) NOT NULL,
-	minorTopic VARCHAR(255) NOT NULL,
-	summary VARCHAR(255) NOT NULL,
-    articleContent MEDIUMTEXT NOT NULL,
-    availability ENUM ('removed', 'available') DEFAULT 'available' NOT NULL,
-	PRIMARY KEY (articleName, authorUsername, orgID, publicationDate),
-	FOREIGN KEY (authorUsername) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE,
-	FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `Articles` (
+  `articleName` varchar(255) NOT NULL,
+  `authorUsername` varchar(255) DEFAULT NULL,
+  `orgID` int DEFAULT NULL,
+  `publicationDate` datetime NOT NULL,
+  `majorTopic` varchar(255) NOT NULL,
+  `minorTopic` varchar(255) NOT NULL,
+  `summary` varchar(255) NOT NULL,
+  `articleContent` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `availability` enum('removed','available') NOT NULL DEFAULT 'available',
+  PRIMARY KEY (`articleName`,`publicationDate`),
+  FOREIGN KEY (authorUsername) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Subscriptions (
