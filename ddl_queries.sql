@@ -75,12 +75,13 @@ CREATE TABLE Subscriptions (
 );
 
 CREATE TABLE EmailLogs (
+	username VARCHAR (255) NOT NULL,
 	recipientEmail VARCHAR (255) NOT NULL,
     `dateTime` DATETIME NOT NULL,
     `subject` VARCHAR (255) NOT NULL,
     body MEDIUMTEXT NOT NULL, -- TODO: MAKE SURE THIS DATA TYPE IS CORRECT
-    PRIMARY KEY (recipientEmail, `dateTime`),
-    FOREIGN KEY (recipientEmail) REFERENCES Users (email) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY (username, recipientEmail, `dateTime`),
+    FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Employees (
