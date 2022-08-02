@@ -1,8 +1,30 @@
+CREATE TABLE Regions (
+	regionName VARCHAR (255) NOT NULL,
+    PRIMARY KEY (regionName)
+);
+
 CREATE TABLE Organizations (
 	orgID INT AUTO_INCREMENT NOT NULL,
     orgName VARCHAR (255) NOT NULL,
     orgType enum ('Company', 'ResearchCenter', 'GovAgency') NOT NULL,
     PRIMARY KEY (orgID)
+);
+
+CREATE TABLE Countries (
+	countryName VARCHAR (255) NOT NULL,
+    regionName VARCHAR (255) NOT NULL,
+    orgID INT, -- TODO: MAKE SURE THIS CAN BE NULL
+    PRIMARY KEY (countryName),
+    FOREIGN KEY (regionName) REFERENCES Regions (regionName) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE ProStaTers (
+	prostaterName VARCHAR(255) NOT NULL,
+    countryName VARCHAR(255) NOT NULL,
+    population INT NOT NULL,
+    PRIMARY KEY (prostaterName, countryName),
+    FOREIGN KEY (countryName) REFERENCES Countries (countryName) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Users(
@@ -14,7 +36,7 @@ CREATE TABLE Users(
     phone INT NOT NULL,
     pwdChecksum VARCHAR (255) NOT NULL,
     userType ENUM('Admin', 'Researcher', 'Delegate', 'User'),
-    `active` BIT DEFAULT 1 NOT NULL,
+    `active` ENUM ('active', 'suspended') DEFAULT 'active' NOT NULL,
     FOREIGN KEY (citizenship) REFERENCES Countries (countryName),
     PRIMARY KEY (username)
 );
@@ -35,20 +57,11 @@ CREATE TABLE Articles (
 	majorTopic VARCHAR(255) NOT NULL,
 	minorTopic VARCHAR(255) NOT NULL,
 	summary VARCHAR(255) NOT NULL,
-    articleContent MEDIUMTEXT DEFAULT "" NOT NULL,
+    articleContent MEDIUMTEXT NOT NULL,
     availability ENUM ('removed', 'available') DEFAULT 'available' NOT NULL,
 	PRIMARY KEY (articleName, authorUsername, orgID, publicationDate),
 	FOREIGN KEY (authorUsername) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE EmailLogs (
-	recipientEmail VARCHAR (255) NOT NULL,
-    `dateTime` DATETIME NOT NULL,
-    `subject` VARCHAR (255) NOT NULL,
-    body MEDIUMTEXT NOT NULL, -- TODO: MAKE SURE THIS DATA TYPE IS CORRECT
-    PRIMARY KEY (recipientEmail, `dateTime`),
-    FOREIGN KEY (recipientEmail) REFERENCES Users (email) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Subscriptions (
@@ -61,34 +74,21 @@ CREATE TABLE Subscriptions (
     PRIMARY KEY (username, authorUsername, orgID)
 );
 
+CREATE TABLE EmailLogs (
+	recipientEmail VARCHAR (255) NOT NULL,
+    `dateTime` DATETIME NOT NULL,
+    `subject` VARCHAR (255) NOT NULL,
+    body MEDIUMTEXT NOT NULL, -- TODO: MAKE SURE THIS DATA TYPE IS CORRECT
+    PRIMARY KEY (recipientEmail, `dateTime`),
+    FOREIGN KEY (recipientEmail) REFERENCES Users (email) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE Employees (
 	username VARCHAR (255) NOT NULL,
     orgID INT NOT NULL,
     FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (username, orgID)
-);
-
-CREATE TABLE Regions (
-	regionName VARCHAR (255) NOT NULL,
-    PRIMARY KEY (regionName)
-);
-
-CREATE TABLE Countries (
-	countryName VARCHAR (255) NOT NULL,
-    regionName VARCHAR (255) NOT NULL,
-    orgID INT, -- TODO: MAKE SURE THIS CAN BE NULL
-    PRIMARY KEY (countryName),
-    FOREIGN KEY (regionName) REFERENCES Regions (regionName) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE ProStaTers (
-	prostaterName VARCHAR(255) NOT NULL,
-    countryName VARCHAR(255) NOT NULL,
-    population INT NOT NULL,
-    PRIMARY KEY (prostaterName, countryName),
-    FOREIGN KEY (countryName) REFERENCES Countries (countryName) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Vaccines (
