@@ -69,7 +69,7 @@ CREATE TABLE Subscriptions (
     authorUsername VARCHAR (255) NOT NULL,
     `orgID` INT NOT NULL,
     FOREIGN KEY (username) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (authorUsername) REFERENCES Articles (authorUsername) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (authorUsername) REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (orgID) REFERENCES Organizations (orgID) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (username, authorUsername, orgID)
 );
