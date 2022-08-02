@@ -36,7 +36,7 @@ CREATE TABLE Users(
     phone INT NOT NULL,
     pwdChecksum VARCHAR (255) NOT NULL,
     userType ENUM('Admin', 'Researcher', 'Delegate', 'User'),
-    `active` BIT DEFAULT 1 NOT NULL,
+    `active` ENUM ('active', 'suspended') DEFAULT 'active' NOT NULL,
     FOREIGN KEY (citizenship) REFERENCES Countries (countryName),
     PRIMARY KEY (username)
 );
