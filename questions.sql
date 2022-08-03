@@ -6,17 +6,18 @@ ORDER BY userType, citizenship;
 
 # 11
 
-SELECT authorUsername, firstName, lastName, Articles.orgID, majorTopic, minorTopic, publicationDate, citizenship
+SELECT authorUsername, firstName, lastName, Organizations.orgName, majorTopic, minorTopic, publicationDate, citizenship
 FROM Users, Articles, Organizations
 WHERE Users.username = Articles.authorUsername OR Organizations.orgID = Articles.orgID
 ORDER BY citizenship, lastName, firstName, publicationDate;
 
 # 12
 
-SELECT authorUsername, firstName, lastName, Articles.orgID, majorTopic, minorTopic, publicationDate, citizenship
-FROM Users, Articles, Organizations
-WHERE Users.username = Articles.authorUsername OR Organizations.orgID = Articles.orgID
-AND availability = 'removed'
+SELECT authorUsername, Articles2.orgID, majorTopic, minorTopic, publicationDate, citizenship, availability
+FROM Users, Articles2, Organizations
+WHERE availability = 'removed'
+AND (Users.username = Articles2.authorUsername OR Organizations.orgID = Articles2.orgID)
+GROUP BY articleName
 ORDER BY citizenship, lastName, firstName, publicationDate;
 
 # 13
@@ -78,15 +79,15 @@ SELECT dateTime, ProStaTers.prostaterName, ProStaTers.population, SUM(CASE WHEN 
 FROM ProStaTers, Reports
 WHERE ProStaTers.prostaterName = Reports.prostaterName
 AND ProStaTers.countryName = 'Canada'
-GROUP BY DAY(Reports.dateTime), Reports.prostaterName
+GROUP BY DATE(Reports.dateTime), Reports.prostaterName
 ORDER BY Reports.dateTime DESC;
 
 # 20
 
-SELECT Users.firstName, Users.lastName, Users.citizenship, (SELECT COUNT(*) FROM Subscriptions WHERE Subscriptions.authorUsername = Articles.authorUsername) AS subscriberCount
-FROM Articles, Users
-WHERE Users.username = Articles.authorUsername
+SELECT Articles.authorUsername, Organizations.orgName, Users.citizenship, (SELECT COUNT(*) FROM Subscriptions WHERE Subscriptions.authorUsername = Articles.authorUsername OR Subscriptions.orgID = Articles.orgID) AS subscriberCount
+FROM Articles, Users, Organizations
+WHERE (Users.username = Articles.authorUsername OR Organizations.orgID = Articles.orgID)
 GROUP BY Articles.authorUsername
 ORDER BY subscriberCount DESC;
 
-
+SELECT * FROM Subscriptions;
